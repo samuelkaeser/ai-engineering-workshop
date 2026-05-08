@@ -8,13 +8,16 @@ A 3-hour TypeScript workshop on Matt Pocock-style AI engineering — built aroun
 - pnpm (or npm/yarn/bun)
 - An [Anthropic API key](https://console.anthropic.com/settings/keys)
 
-## Setup
+## Required ≥24 hours before the workshop
 
-```sh
-pnpm install
-cp .env.example .env
-# edit .env and paste your ANTHROPIC_API_KEY
-```
+The on-site Block 0 is only 9 minutes. Do these the night before — the `better-sqlite3` rebuild is the single most likely thing to derail you.
+
+1. `pnpm install`
+2. `pnpm rebuild better-sqlite3 && pnpm approve-builds`
+3. `cp .env.example .env` and paste your `ANTHROPIC_API_KEY`
+4. Verify: `pnpm exercise 0.1` prints a Claude response
+
+If step 4 fails, fix it before you arrive.
 
 ## Running exercises
 
@@ -44,16 +47,22 @@ Opens the evalite UI at [http://localhost:3006](http://localhost:3006).
 
 | Block | Topic | Time |
 |---|---|---|
-| 0 | Setup + audience calibration | 5m |
-| 1 | Framing: the loop you haven't written yet | 10m |
+| 0 | Setup + audience calibration + form pairs | 9m |
+| 1 | Framing: evals are TDD for LLM apps | 6m |
 | 2 | Structured output: forced tool-use + Zod | 15m |
 | — | Stretch break | 5m |
 | 3 | **Evals — the centrepiece** | 80m |
 | — | Stretch break | 5m |
-| 4 | Agent loop (default) | 45m |
+| 4 | Agent loop (`04b-agent`) | 45m |
 | 5 | Wrap | 5m |
 
 See [`FACILITATOR.md`](./FACILITATOR.md) for facilitator notes.
+
+## Layout
+
+- `exercises/` — the workshop arc (Blocks 0, 2, 3, 4b, 5).
+- `extras/` — after-workshop deep-dives (`04a-rag/`, `04c-reliability/`). Linked from Block 5; not run live.
+- `shared/` — reusable utilities. Imported as `@shared/*` from any exercise.
 
 ## Next steps after this workshop
 

@@ -1,5 +1,7 @@
 # 00.1 — Hello Claude
 
+> **Find a partner now.** One laptop, swap typist after each exercise. Pairing makes a 3-hour workshop richer than soloing it — you'll argue about the gold-set labels in 03.3, and that's the whole point.
+
 A 2-minute smoke test to confirm your environment is wired up.
 
 ## What you'll do

@@ -1,4 +1,4 @@
-import { client, SUT_MODEL } from "../../../../shared/client.ts";
+import { client, SUT_MODEL } from "@shared/client.ts";
 import { tools, handlers } from "./tools.ts";
 import type Anthropic from "@anthropic-ai/sdk";
 

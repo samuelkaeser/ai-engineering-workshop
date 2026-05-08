@@ -1,4 +1,4 @@
-import { client, SUT_MODEL } from "../../../../shared/client.ts";
+import { client, SUT_MODEL } from "@shared/client.ts";
 
 const LONG_CONTEXT = `You are a triage assistant.
 
@@ -28,12 +28,17 @@ async function ask(question: string) {
     messages: [{ role: "user", content: question }],
   });
   const ms = Date.now() - t0;
-  const u = response.usage;
-  console.log(
-    `[${ms}ms] input=${u.input_tokens} created=${u.cache_creation_input_tokens ?? 0} read=${u.cache_read_input_tokens ?? 0} output=${u.output_tokens}`
-  );
+
+  // TODO: log:
+  //   - response.usage.input_tokens
+  //   - response.usage.cache_creation_input_tokens (first call)
+  //   - response.usage.cache_read_input_tokens (second call)
+  //   - latency in ms
+  //
+  // The second run should show cache_read_input_tokens > 0 and lower latency.
+
   const block = response.content[0];
-  console.log("  →", block.type === "text" ? block.text.slice(0, 80) : "");
+  console.log(`(${ms}ms)`, block.type === "text" ? block.text.slice(0, 80) : "");
 }
 
 await ask("How should I label a memory regression after a dependency upgrade?");

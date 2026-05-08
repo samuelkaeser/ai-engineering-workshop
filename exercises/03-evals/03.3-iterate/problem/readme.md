@@ -6,16 +6,16 @@
 
 Two halves:
 
-### Part A (10m) — The data flywheel: add 3 examples each
+### Part A (10m) — The data flywheel: add 1 example per pair
 
-Open `datasets/gold-set.json`. Each pair, **add 3 new examples** of GitHub issues your imagination thinks would be hard for the classifier:
+Open `datasets/gold-set.json`. Each pair, **add exactly 1 new example** of a GitHub issue your imagination thinks would be hard for the classifier. (Why one and not three? With ~10 pairs this still grows the gold set ~25%, and the next eval re-run stays under 90s — keep the leaderboard tempo alive.) Categories worth thinking about:
 - Mixed-category issues ("the docs say X but the API does Y" — bug or docs?).
 - Sarcasm ("great, another feature request that's actually a bug").
 - Code-heavy with no prose.
 - Non-English snippets.
 - Vague one-liners.
 
-Pick the label *you* think is correct. Disagree with your pair? Talk it out — that's the meta-lesson.
+Pick the label *you* think is correct. Disagree with your pair? Talk it out — that's the meta-lesson; one example forces you to argue about it instead of churning out three to pad the count.
 
 Save the file, re-run `pnpm eval:dev` from 03.1 — your data is now part of the eval.
 

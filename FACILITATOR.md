@@ -6,31 +6,27 @@
 
 | | Block | Time | Notes |
 |---|---|---|---|
-| 0:00 | Setup + calibration | 5m | Two show-of-hands: "called Claude API before?" / "written an eval before?" |
-| 0:05 | Block 1 — framing | 10m | Vibes Trough → Data-Driven Slope. Land "evals are TDD for LLM apps." |
+| 0:00 | Setup + calibration + form pairs | 9m | Two show-of-hands: "called Claude API before?" / "written an eval before?". Then: "Find a partner now. One laptop, swap typist after each exercise." |
+| 0:09 | Block 1 — framing | 6m | One slide: Vibes Trough → Data-Driven Slope. Land "evals are TDD for LLM apps." Resist the urge to monologue. |
 | 0:15 | Block 2 — structured output (02.1 only) | 15m | Forced tool-use + Zod. Fast pace; this is plumbing. |
 | 0:30 | Stretch break | 5m | |
-| 0:35 | **Block 3 — evals (centrepiece)** | 80m | See below. Recovered 5m from Block 2 goes here. |
+| 0:35 | **Block 3 — evals (centrepiece)** | 80m | See below. |
 | 1:55 | Stretch break | 5m | |
-| 2:00 | Block 4 — agent loop | 45m | Default 4b. See "Block 4 choice" below. |
-| 2:45 | Block 5 — wrap | 5m | Two next-step tracks. |
+| 2:00 | Block 4 — `04b-agent` (agent loop) | 45m | Single path. RAG / reliability live in `extras/`. |
+| 2:45 | Block 5 — wrap | 5m | Two next-step tracks. Point to `extras/` for after-workshop. |
 | 2:50 | Slack | 10m | Spillover, Q&A, individual help. |
 
 ## Block 3 internal timing (80m total)
 
 - 03.1 deterministic: 22m
 - 03.2 LLM-as-judge: 22m
-- 03.3 (Part A flywheel): 10m — pairs add 3 examples each
+- 03.3 (Part A flywheel): 10m — **each pair adds 1 example.** With 10 pairs that's ~10 added rows; the eval re-run stays under ~90s. Adding 3 each (~30 rows) doubles the gold set and the leaderboard tempo dies.
 - 03.3 (Part B leaderboard): 21m — change prompt, re-run, top score wins
-- Debrief / read top 2–3 prompts aloud: 5m (use the recovered time here — per Berkun, *showing one student's solution is more instructive than showing yours*)
+- Debrief / read top 2–3 prompts aloud: 5m (per Berkun, *showing one student's solution is more instructive than showing yours* — `solution/example-prompts.md` has facilitator-prep examples to fall back on if the room is quiet)
 
-## Block 4 choice (live decision)
+## Block 4 — single path
 
-> **Default to 4b (agent loop) unless the room actively asks otherwise.** RAG (4a) and reliability (4c) are listed as alternatives but only switch if **60%+ vote** for one of them. This removes the mid-workshop decision load — you don't have to read the room under pressure; you have a default and a clear bar to deviate from it.
-
-- **Default → 4b agent loop.** The tool-use loop is the core primitive of every agent framework — highest-leverage thing to internalize.
-- **Curious / library-leaning** → 4a RAG (TF-IDF retrieval + augment). Switch if 60%+ vote.
-- **Production-leaning** → 4c Reliability (caching + retries + meter). Switch if 60%+ vote.
+Block 4 is `04b-agent` (the tool-use loop). RAG and reliability deep-dives live in `extras/04a-rag/` and `extras/04c-reliability/` and are linked from Block 5 as after-workshop reading. We removed the live-vote mechanic because picking under pressure at minute 115 was net cognitive load on the facilitator without changing student outcomes.
 
 If running short, demo Block 4 from the `solutions` branch instead of having students code.
 
@@ -50,7 +46,7 @@ If a student's score is dramatically worse, check: did they remove `tool_choice`
 
 ## Evalite troubleshooting
 
-- **`Could not locate the bindings file`** for `better-sqlite3` → run `pnpm rebuild better-sqlite3` and `pnpm approve-builds`.
+- **`Could not locate the bindings file`** for `better-sqlite3` → run `pnpm rebuild better-sqlite3` and `pnpm approve-builds`. (Also covered in the README's pre-workshop checklist; if students hit it on the day, they skipped that step.)
 - **UI doesn't open** → check `localhost:3006` (not 5173). Some dev environments need a port forward.
 - **No evals discovered** → confirm filenames end in `.eval.ts` and you're running from repo root.
 
@@ -71,4 +67,5 @@ If a student's score is dramatically worse, check: did they remove `tool_choice`
 
 - **App-building track**: [Poland AI/TS Workshop](https://github.com/ai-hero-dev/poland-ai-ts-workshop) — 52 exercises, AI SDK v5/v6.
 - **Agentic-coding track**: Matt's Skills posts ([`/tdd`](https://www.aihero.dev/skills-tdd), [`/triage`](https://www.aihero.dev/burn-through-your-backlog-with-my-triage-skill), [`/grill-with-docs`](https://www.aihero.dev/grill-with-docs)) and the [AI 2026 Workshop](https://www.aihero.dev/s/ai-2026).
+- **In-repo deep-dives**: `extras/04a-rag/` (TF-IDF retrieve + augment) and `extras/04c-reliability/` (caching + retry/meter). Same eval discipline, different scorer.
 - **Foundations refresher**: [LLM Fundamentals](https://www.aihero.dev/llm-fundamentals).

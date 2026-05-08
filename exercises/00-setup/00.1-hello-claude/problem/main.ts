@@ -1,4 +1,4 @@
-import { client, SUT_MODEL } from "../../../../shared/client.ts";
+import { client, SUT_MODEL } from "@shared/client.ts";
 
 async function main() {
   // TODO: call client.messages.create with model = SUT_MODEL,

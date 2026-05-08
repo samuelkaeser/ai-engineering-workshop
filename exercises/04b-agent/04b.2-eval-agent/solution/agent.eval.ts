@@ -1,5 +1,5 @@
 import { evalite } from "evalite";
-import { client, JUDGE_MODEL, SUT_MODEL } from "../../../../shared/client.ts";
+import { client, JUDGE_MODEL, SUT_MODEL } from "@shared/client.ts";
 import { tools, handlers } from "../../04b.1-tool-loop/problem/tools.ts";
 import type Anthropic from "@anthropic-ai/sdk";
 

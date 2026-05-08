@@ -1,5 +1,5 @@
 import goldSet from "../../../../datasets/gold-set.json" with { type: "json" };
-import type { GoldExample } from "../../../../shared/types.ts";
+import type { GoldExample } from "@shared/types.ts";
 import type Anthropic from "@anthropic-ai/sdk";
 
 const issues = goldSet as GoldExample[];

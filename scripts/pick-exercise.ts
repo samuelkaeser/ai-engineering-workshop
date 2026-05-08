@@ -5,41 +5,63 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const exercisesDir = path.resolve(here, "..", "exercises");
+const root = path.resolve(here, "..");
+const exercisesDir = path.join(root, "exercises");
+const extrasDir = path.join(root, "extras");
 
-type Exercise = { id: string; label: string; dir: string };
+type Exercise = { id: string; label: string; dir: string; group: "workshop" | "extras" };
 
-function collect(): Exercise[] {
+function collectFrom(baseDir: string, group: Exercise["group"]): Exercise[] {
+  if (!existsSync(baseDir)) return [];
   const out: Exercise[] = [];
-  for (const block of readdirSync(exercisesDir, { withFileTypes: true })) {
+  for (const block of readdirSync(baseDir, { withFileTypes: true })) {
     if (!block.isDirectory()) continue;
-    const blockDir = path.join(exercisesDir, block.name);
+    const blockDir = path.join(baseDir, block.name);
     for (const ex of readdirSync(blockDir, { withFileTypes: true })) {
       if (!ex.isDirectory()) continue;
       const m = ex.name.match(/^([\d.a-z]+)-(.+)$/);
       if (!m) continue;
       const id = m[1];
-      const label = `${id}  ${m[2].replace(/-/g, " ")}`;
-      out.push({ id, label, dir: path.join(blockDir, ex.name) });
+      const prefix = group === "extras" ? "↳ extras  " : "";
+      const label = `${prefix}${id}  ${m[2].replace(/-/g, " ")}`;
+      out.push({ id, label, dir: path.join(blockDir, ex.name), group });
     }
   }
-  return out.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
+  return out;
 }
 
-const exercises = collect();
+const workshop = collectFrom(exercisesDir, "workshop").sort((a, b) =>
+  a.id.localeCompare(b.id, undefined, { numeric: true })
+);
+const extras = collectFrom(extrasDir, "extras").sort((a, b) =>
+  a.id.localeCompare(b.id, undefined, { numeric: true })
+);
+const exercises = [...workshop, ...extras];
+
 if (exercises.length === 0) {
   console.error("No exercises found.");
   process.exit(1);
 }
 
-const choice = await select({
-  message: "Pick an exercise",
-  options: exercises.map((e) => ({ value: e.id, label: e.label })),
-});
+const options: { value: string; label: string }[] = [];
+for (const e of workshop) options.push({ value: e.id, label: e.label });
+if (extras.length) {
+  // Visual separator: a non-selectable header isn't supported by @clack/prompts
+  // here, so we prefix extras labels in `collectFrom` instead.
+  for (const e of extras) options.push({ value: `extras:${e.id}`, label: e.label });
+}
+
+const choice = await select({ message: "Pick an exercise", options });
 
 if (typeof choice !== "string") process.exit(0);
 
-const ex = exercises.find((e) => e.id === choice)!;
+const isExtras = choice.startsWith("extras:");
+const wantedId = isExtras ? choice.slice("extras:".length) : choice;
+const ex =
+  (isExtras ? extras : workshop).find((e) => e.id === wantedId) ??
+  exercises.find((e) => e.id === wantedId);
+if (!ex) process.exit(1);
+
 const problemMain = path.join(ex.dir, "problem", "main.ts");
 const solutionMain = path.join(ex.dir, "solution", "main.ts");
 const target = existsSync(problemMain) ? problemMain : solutionMain;

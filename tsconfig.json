@@ -11,7 +11,17 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "isolatedModules": true,
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["./shared/*"]
+    }
   },
-  "include": ["shared/**/*", "exercises/**/*", "scripts/**/*", "datasets/**/*"]
+  "include": [
+    "shared/**/*",
+    "exercises/**/*",
+    "extras/**/*",
+    "scripts/**/*",
+    "datasets/**/*"
+  ]
 }

@@ -1,13 +1,19 @@
-import { client, SUT_MODEL } from "../../../../shared/client.ts";
+import { client, SUT_MODEL } from "@shared/client.ts";
 import { retrieve } from "../../04a.1-retrieve/solution/main.ts";
 
 async function answer(question: string): Promise<string> {
   const hits = retrieve(question, 3);
 
-  // TODO: build a system prompt that includes the retrieved KB articles.
-  //       Format each as `[id] title\nbody`, separated by blank lines.
-  //       Tell Claude to cite the [id]s it uses.
-  const systemPrompt = "TODO: build me";
+  const context = hits
+    .map((h) => `[${h.doc.id}] ${h.doc.title}\n${h.doc.body}`)
+    .join("\n\n");
+
+  const systemPrompt = `You are a helpful triage assistant. Use ONLY the
+knowledge-base articles below to answer. Cite each article you use as [id].
+If the articles don't cover the question, say so.
+
+KB:
+${context}`;
 
   const response = await client.messages.create({
     model: SUT_MODEL,

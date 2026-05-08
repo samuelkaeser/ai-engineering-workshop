@@ -7,7 +7,7 @@ You can now:
 2. Define success criteria for an LLM feature as concrete eval metrics.
 3. Write deterministic *and* LLM-as-a-Judge evals using Evalite.
 4. Iterate prompts against those evals — change the prompt, watch the score, repeat.
-5. (Block 4) Build an agent loop / RAG / reliability primitives, all of which you re-eval the same way.
+5. (Block 4) Build an agent loop end-to-end and write the rubric that grades its prose answers — same eval discipline, different scorer.
 
 The whole point: **stop tuning prompts on vibes**. You have a number now.
 
@@ -15,7 +15,16 @@ The whole point: **stop tuning prompts on vibes**. You have a number now.
 
 [Matt Pocock's *7 Phases of AI Development*](https://www.aihero.dev/my-7-phases-of-ai-development) maps the whole lifecycle: idea → research → prototype → PRD → kanban → execution → QA. **What you did today lives in execution + QA** — the eval-driven feedback loop is the QA primitive that makes the rest of the workflow worth doing.
 
-## Two next-step tracks
+## In-repo deep-dives (start here tonight)
+
+We trimmed the live workshop to one Block 4 path. The other two paths are still in this repo, in `extras/`, and use exactly the same eval discipline you just learned:
+
+- **`extras/04a-rag/`** — TF-IDF retrieve + augment. Build the retrieval primitive, then ask Claude to answer using only the retrieved articles. Re-eval with an LLM-as-Judge for *faithfulness*. Pairs with the agent loop you just wrote: same shape, different scorer.
+- **`extras/04c-reliability/`** — Prompt caching (`cache_control`) and a retry/meter wrapper. The production primitives that turn a working agent into one you can ship. No new eval — but the metrics file is itself a kind of eval.
+
+Both are runnable via `pnpm exercise 4a.1` etc., and the picker (`pnpm dev`) lists them under an "extras" group.
+
+## Two external next-step tracks
 
 Pick whichever fits you better:
 

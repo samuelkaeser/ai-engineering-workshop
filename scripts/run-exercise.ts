@@ -10,9 +10,12 @@ if (!arg) {
 }
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const exercisesDir = path.resolve(here, "..", "exercises");
+const root = path.resolve(here, "..");
+// Search workshop first; fall back to extras so `pnpm exercise 4a.1` still works.
+const SEARCH_ROOTS = [path.join(root, "exercises"), path.join(root, "extras")];
 
 function find(id: string, dir: string): string | null {
+  if (!existsSync(dir)) return null;
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     if (!e.isDirectory()) continue;
     const sub = path.join(dir, e.name);
@@ -23,9 +26,13 @@ function find(id: string, dir: string): string | null {
   return null;
 }
 
-const dir = find(arg, exercisesDir);
+let dir: string | null = null;
+for (const r of SEARCH_ROOTS) {
+  dir = find(arg, r);
+  if (dir) break;
+}
 if (!dir) {
-  console.error(`No exercise starting with "${arg}-" under ${exercisesDir}`);
+  console.error(`No exercise starting with "${arg}-" under exercises/ or extras/`);
   process.exit(1);
 }
 

@@ -1,9 +1,9 @@
-import { client, SUT_MODEL } from "../../../../shared/client.ts";
+import { client, SUT_MODEL } from "@shared/client.ts";
 import {
   IssueClassificationSchema,
   issueClassificationInputSchema,
-} from "../../../../shared/schema.ts";
-import type { IssueClassification } from "../../../../shared/types.ts";
+} from "@shared/schema.ts";
+import type { IssueClassification } from "@shared/types.ts";
 
 const TOOL_NAME = "classify_issue";
 

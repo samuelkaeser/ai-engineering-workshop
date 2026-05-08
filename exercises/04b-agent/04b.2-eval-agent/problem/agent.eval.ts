@@ -1,5 +1,5 @@
 import { evalite } from "evalite";
-import { client, JUDGE_MODEL, SUT_MODEL } from "../../../../shared/client.ts";
+import { client, JUDGE_MODEL, SUT_MODEL } from "@shared/client.ts";
 import { tools, handlers } from "../../04b.1-tool-loop/problem/tools.ts";
 import type Anthropic from "@anthropic-ai/sdk";
 
@@ -42,13 +42,17 @@ async function runAgent(question: string): Promise<string> {
   return "(agent did not finish)";
 }
 
-const RUBRIC = `Score 0–5:
-- 5: answer is correct, faithful to the issue tracker, and concise.
-- 3: roughly right but vague or partially missing.
-- 1: makes claims not supported by the corpus, or missed the question.
-- 0: hallucinates issues that don't exist.
-
-Reply by calling the score_answer tool.`;
+// TODO: write the rubric the judge will use to score the agent's answer.
+//
+// You're scoring two things together on 0–5:
+//   (a) faithfulness to the corpus (the issues the agent looked at)
+//   (b) whether the answer actually addresses the question
+//
+// Re-read JUDGE_RUBRIC in shared/scorers.ts (the one from 03.2). The shape
+// is the same — describe what each score level means, and tell the judge to
+// reply by calling the score_answer tool. The plumbing below already wires
+// `RUBRIC` into the system prompt; you just have to design it.
+const RUBRIC = ``;
 
 async function judgeAnswer({
   output,

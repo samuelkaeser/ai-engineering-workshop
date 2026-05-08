@@ -1,6 +1,6 @@
 import { appendFileSync } from "node:fs";
 import path from "node:path";
-import { client, SUT_MODEL } from "../../../../shared/client.ts";
+import { client, SUT_MODEL } from "@shared/client.ts";
 import Anthropic from "@anthropic-ai/sdk";
 
 const METRICS_PATH = path.resolve(process.cwd(), "metrics.jsonl");
@@ -16,22 +16,12 @@ async function withRetry<T>(
   const maxAttempts = opts.maxAttempts ?? 4;
   const baseDelayMs = opts.baseDelayMs ?? 200;
 
-  let lastErr: unknown;
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    try {
-      return await fn();
-    } catch (err) {
-      lastErr = err;
-      const retriable =
-        err instanceof Anthropic.APIError &&
-        (err.status === 429 || err.status === 529);
-      if (!retriable || attempt === maxAttempts - 1) throw err;
-      const wait = baseDelayMs * 2 ** attempt + Math.random() * 100;
-      console.warn(`  retry ${attempt + 1}/${maxAttempts} after ${Math.round(wait)}ms (${err.status})`);
-      await new Promise((r) => setTimeout(r, wait));
-    }
-  }
-  throw lastErr;
+  // TODO: try fn(). If it throws an Anthropic.APIError with status 429 or 529,
+  //       wait baseDelayMs * 2^attempt (with a small random jitter), and retry.
+  //       Bail out after maxAttempts. Re-throw any non-retriable error
+  //       immediately.
+
+  return fn(); // <- replace this with the loop above
 }
 
 async function call(question: string) {

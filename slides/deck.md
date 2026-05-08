@@ -13,166 +13,88 @@ paginate: true
 
 ---
 
-# Block 0 — Setup (5m)
+# Block 0 — Setup (9m)
 
 Two questions, hands up:
 
 1. Who's called Claude's API from code before?
 2. Who's written an eval before?
 
+Then: **find a partner.** One laptop, swap typist each exercise.
+
 ---
 
-# Block 1 — The loop you haven't written yet (10m)
+# Block 1 — Vibes Trough → Data-Driven Slope (6m)
 
 You've built AI toys. They worked on three examples.
 Then real users broke them.
 
-This is the **Vibes-Only Trough**.
-
----
-
-# Block 1 — Vibes Trough → Data-Driven Slope
-
-The way out is the same as TDD's way out:
+The way out is the same as TDD's:
 
 > **Change → measure → change.**
 
 For LLM apps that loop is called **evals**.
 
-Evals are **TDD for LLM apps.**
+> *Evals are TDD for LLM apps.*
 
 ---
 
-# Block 2 — Forced tool-use (15m)
-
-> JSON mode says *"please be JSON"*.
-> Forced tool-use says *"the only legal next move is this schema"*.
-
-```ts
-tool_choice: { type: "tool", name: "classify_issue" }
-```
-
-You build `classifyIssue(title, body)` — the System Under Test for the rest of the day.
-
----
-
-# Break — 5m
-
----
-
-# Block 3 — Evals (80m)
-
-The centrepiece. Pair up.
-
-We use **[Evalite](https://www.evalite.dev)** — Matt's own TypeScript-native eval harness.
-
-Three types of evals (Matt's taxonomy):
+# Block 3 — Three types of evals (Matt's taxonomy)
 
 1. **Deterministic** — pass/fail. (`exactLabel`, `schemaValid`)
 2. **LLM-as-a-Judge** — second model grades the first.
-3. **Human Feedback** — thumbs up/down.
+3. **Human Feedback** — thumbs up/down (we won't get to this today).
+
+Mechanics live in each `readme.md`. The slides are framing.
 
 ---
 
-# Block 3.1 — Deterministic (22m)
+# Block 4 — The agent loop
 
-`exactLabel` + `schemaValid` over 30 hand-labelled GitHub issues.
+The core primitive of every agent framework:
 
-Run `pnpm eval:dev` → UI at `localhost:3006`.
-
-You'll land somewhere around **0.73–0.83**.
-
-That's your baseline. Remember it.
-
----
-
-# Block 3.2 — LLM-as-a-Judge (22m)
-
-What model should judge?
-
-Not the one being judged.
-
-- **SUT**: `claude-haiku-4-5`
-- **Judge**: `claude-sonnet-4-6`
-
-Different family. Avoids self-evaluation bias.
-
-The rubric *is* the prompt. Judge prompts are themselves a system you have to design.
-
----
-
-# Block 3.3a — Data flywheel (10m)
-
-Add **3 examples each** to the gold set.
-Tricky ones. Mixed-category. Sarcasm. Code-heavy.
-
-Now the eval is yours, not the facilitator's.
-
----
-
-# Block 3.3b — Iterate, leaderboard-style (21m)
-
-Edit `DEFAULT_SYSTEM_PROMPT`. Re-run. Watch the score.
-
-- **Easy**: tighten the prompt. Add definitions, tie-breakers.
-- **Hard**: add a few-shot example from the gold set.
-
-Highest `exactLabel` wins.
-
-Top 2–3 prompts → group discussion.
-
----
-
-# Break — 5m
-
----
-
-# Block 4 — Tool calls inside a loop (45m)
-
-> *The core primitive of every agent framework.*
-
-```ts
-while (true) {
-  const r = await client.messages.create({ model, tools, messages });
-  if (r.stop_reason === "end_turn") return text(r);
-  // run each tool_use, feed tool_results back, loop.
-}
+```
+[user msg] → [API call] → stop_reason?
+                          ├ end_turn → return text
+                          └ tool_use → execute tools
+                                       → append tool_results
+                                       → loop
 ```
 
-This is what every agent library wraps.
+Same eval discipline. The agent answers prose, so `exactLabel` doesn't apply — use **LLM-as-a-Judge** with a "faithful to the corpus?" rubric.
 
 ---
 
-# Block 4 — Then re-eval
+# What we are NOT covering today
 
-The agent answers free-form prose. `exactLabel` doesn't apply.
+Out of scope, on purpose:
 
-**LLM-as-a-Judge**, with a "is this faithful to the corpus?" rubric.
+- Streaming
+- Memory / persistence
+- Multi-agent orchestration
+- Fine-tuning
+- Embeddings-based RAG (we use TF-IDF in `extras/`)
+- Prompt injection / red-teaming
 
-Same eval discipline, different scorer.
+Block 5 points you at where each of these lives.
 
 ---
 
 # Block 5 — Where this sits
 
-Matt Pocock's **7 Phases of AI Development**:
+Matt's **7 Phases of AI Development**:
 
 > idea → research → prototype → PRD → kanban → **execution** → **QA**
 
-What you did today lives in execution + QA.
-The eval-driven feedback loop is what makes the rest worth doing.
+What you did today lives in execution + QA. The eval-driven loop is what makes the rest worth doing.
 
----
+**After-workshop deep-dives in this repo:**
+- `extras/04a-rag/` — TF-IDF retrieve + augment.
+- `extras/04c-reliability/` — caching + retry/meter.
 
-# Block 5 — Two tracks from here
-
-**App-building** (this track, going deeper):
-- [Poland AI/TS Workshop](https://github.com/ai-hero-dev/poland-ai-ts-workshop) — 52 exercises
-
-**Agentic coding** (Matt's current focus):
-- [`/tdd` skill](https://www.aihero.dev/skills-tdd)
-- [`/triage` skill](https://www.aihero.dev/burn-through-your-backlog-with-my-triage-skill)
-- [AI Engineer 2026](https://www.aihero.dev/s/ai-2026)
+**Two external tracks:**
+- App-building → [Poland AI/TS Workshop](https://github.com/ai-hero-dev/poland-ai-ts-workshop) (52 exercises).
+- Agentic coding → Matt's Skills ([`/tdd`](https://www.aihero.dev/skills-tdd), [`/triage`](https://www.aihero.dev/burn-through-your-backlog-with-my-triage-skill)) and [AI Engineer 2026](https://www.aihero.dev/s/ai-2026).
 
 ---
 
