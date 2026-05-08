@@ -1,0 +1,186 @@
+[
+  {
+    "id": "b1",
+    "title": "App crashes on startup after upgrading to v2.3",
+    "body": "Repro: install v2.3, run `app start`. Crashes with the stack trace below. v2.2 worked fine.\n\nTypeError: Cannot read properties of undefined (reading 'config')\n  at Bootstrap.init (src/bootstrap.ts:42:18)",
+    "label": "bug"
+  },
+  {
+    "id": "b2",
+    "title": "NullPointerException when saving an empty form",
+    "body": "Hit Save with all fields empty -> 500. Expected: validation error toast.",
+    "label": "bug"
+  },
+  {
+    "id": "b3",
+    "title": "Date picker shows the wrong day in Australia/Sydney",
+    "body": "Pick May 8 in the UI, server stores May 7. Probably a UTC offset bug. Other timezones look fine.",
+    "label": "bug"
+  },
+  {
+    "id": "b4",
+    "title": "Memory grows unbounded in the worker process",
+    "body": "Heap snapshot after 24h shows 2.1 GB resident, mostly retained Buffer objects in the queue consumer. Restarting the worker brings it back to ~80 MB.",
+    "label": "bug"
+  },
+  {
+    "id": "b5",
+    "title": "Loading the dashboard is broken",
+    "body": "Spinner just sits there forever. Tab eventually crashes. Was working last week. Chrome 124, M1 mac.",
+    "label": "bug"
+  },
+  {
+    "id": "b6",
+    "title": "Tests pass locally but fail in CI ~30% of the time",
+    "body": "`auth.spec.ts` flakes with a 401. Same revision passes on a re-run. Looks like a race between the seeder and the first test.",
+    "label": "bug"
+  },
+
+  {
+    "id": "f1",
+    "title": "Add a dark-mode toggle to the settings page",
+    "body": "We have a `prefers-color-scheme` listener already; would be great to expose an explicit toggle for users who want to override.",
+    "label": "feature"
+  },
+  {
+    "id": "f2",
+    "title": "Support webhooks for the new `invoice.refunded` event",
+    "body": "We already deliver `invoice.paid`; adding `invoice.refunded` would let us close the loop on chargebacks without polling.",
+    "label": "feature"
+  },
+  {
+    "id": "f3",
+    "title": "CLI flag to skip database migrations on startup",
+    "body": "Useful in CI where we run migrations as a separate step. Today the only escape is setting `MIGRATE=false`, which isn't documented.",
+    "label": "feature"
+  },
+  {
+    "id": "f4",
+    "title": "Better defaults for the retry policy",
+    "body": "The current default (3 attempts, 100ms) is too aggressive for our upstream API. Could we default to 5 attempts with exponential backoff?",
+    "label": "feature"
+  },
+  {
+    "id": "f5",
+    "title": "It would be really nice if the import wizard also supported CSVs",
+    "body": "We can already import JSON and Parquet. Adding CSV would unblock a chunk of users coming from spreadsheet workflows. Right now they hit a wall and bounce.",
+    "label": "feature"
+  },
+  {
+    "id": "f6",
+    "title": "Migrate the public API from REST to GraphQL",
+    "body": "Long-term we'd like a single endpoint with field-level selection. Listing this as a feature request to track scope. Aware it's a big lift.",
+    "label": "feature"
+  },
+
+  {
+    "id": "q1",
+    "title": "How do I configure a custom retry policy?",
+    "body": "I see a `retry` option in the docs but it's not clear how the backoff parameter works. Is the delay in ms or seconds?",
+    "label": "question"
+  },
+  {
+    "id": "q2",
+    "title": "What's the difference between mode: 'strict' and mode: 'lax'?",
+    "body": "Both seem to validate input but the docs only describe `strict`. When would I want `lax`?",
+    "label": "question"
+  },
+  {
+    "id": "q3",
+    "title": "Can I run two workers in parallel against the same queue?",
+    "body": "I'd like to scale horizontally. Is there a config to make the consumer group safe under concurrent consumers, or is that already the default?",
+    "label": "question"
+  },
+  {
+    "id": "q4",
+    "title": "Best practices for storing the API key in integration tests?",
+    "body": "We use `.env` in dev but for CI we don't want to commit anything. Curious what others do.",
+    "label": "question"
+  },
+  {
+    "id": "q5",
+    "title": "Why does the request hang when I pass an empty body?",
+    "body": "If I `POST /jobs` with `{}`, the request hangs for 30s and then times out. Is that expected? I couldn't find anything about empty bodies in the README.",
+    "label": "question"
+  },
+  {
+    "id": "q6",
+    "title": "How do I deploy this to AWS Lambda?",
+    "body": "Has anyone got this running on Lambda with the Node 20 runtime? Looking for a sample serverless.yml or SAM template.",
+    "label": "question"
+  },
+
+  {
+    "id": "d1",
+    "title": "README doesn't mention the minimum Node version",
+    "body": "We require Node 20 (per `engines` in package.json) but the README install steps don't say so. Newcomers on Node 18 hit a cryptic syntax error.",
+    "label": "docs"
+  },
+  {
+    "id": "d2",
+    "title": "API reference is missing the cancel() method",
+    "body": "`Job.cancel()` is in the source as of v1.4 but doesn't show up in the generated TypeDoc. Probably a missing JSDoc tag.",
+    "label": "docs"
+  },
+  {
+    "id": "d3",
+    "title": "Typo in CONTRIBUTING.md",
+    "body": "Section \"Setting up your enviornment\" should be \"environment\".",
+    "label": "docs"
+  },
+  {
+    "id": "d4",
+    "title": "Tutorial uses deprecated `createClient` signature",
+    "body": "Step 3 of the getting-started tutorial passes `createClient(url, key)` but that signature was removed in v2. New form is `createClient({ url, key })`.",
+    "label": "docs"
+  },
+  {
+    "id": "d5",
+    "title": "Auth docs are correct but confusing",
+    "body": "Everything in `/docs/auth` is technically accurate, but new users routinely think OAuth and JWT mode are mutually exclusive when they aren't. Could we add a worked example showing both together?",
+    "label": "docs"
+  },
+  {
+    "id": "d6",
+    "title": "No migration guide between v1 and v2",
+    "body": "v2 is a major release with breaking changes (auth, config file format, default port). A `MIGRATING.md` would save a lot of issues from confused upgraders.",
+    "label": "docs"
+  },
+
+  {
+    "id": "p1",
+    "title": "Cold-start of the CLI takes ~4 seconds",
+    "body": "`time app --version` reports 3.9–4.2s on a recent MacBook. Most of that is the require graph (we ship the whole SDK). Could we lazy-load?",
+    "label": "perf"
+  },
+  {
+    "id": "p2",
+    "title": "Query response time exceeds 2s when result set > 10k rows",
+    "body": "p99 latency for /search jumps from ~120ms to >2s once the matched set crosses ~10k. Looks like we're materializing the full result before paginating.",
+    "label": "perf"
+  },
+  {
+    "id": "p3",
+    "title": "Image upload times out for files larger than 50MB",
+    "body": "We chunk on the client but the server-side merge step seems to load the whole file in memory before persisting. 50MB+ uploads timeout at the LB after 60s.",
+    "label": "perf"
+  },
+  {
+    "id": "p4",
+    "title": "CPU usage spikes to 100% during background sync",
+    "body": "Every 5 minutes the sync worker pegs a core for ~30s. Profile shows we're re-parsing the same regex on every record. Worth caching.",
+    "label": "perf"
+  },
+  {
+    "id": "p5",
+    "title": "Build is slow",
+    "body": "`pnpm build` takes 90+ seconds on my machine for what looks like a small change. Not sure if it's a real perf issue or our setup. Anyone else seeing this?",
+    "label": "perf"
+  },
+  {
+    "id": "p6",
+    "title": "Memory regression after upgrading lodash to 4.17.22",
+    "body": "Heap usage in the API server grew ~20% across the upgrade. Reverting lodash brings it back. Filing under perf — happy to re-categorize if it's actually a bug in our usage.",
+    "label": "perf"
+  }
+]

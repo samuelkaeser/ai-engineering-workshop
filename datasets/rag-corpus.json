@@ -1,0 +1,12 @@
+[
+  { "id": "kb1", "title": "How we triage timezone bugs", "body": "All datetime issues start by checking if the server is running in UTC. We never store local time. Reproductions must include the user's IANA timezone string." },
+  { "id": "kb2", "title": "Memory leak playbook", "body": "Take a heap snapshot before and after the suspected leak. Look for retained Buffer objects in the queue consumer — most leaks since 2024 have been there." },
+  { "id": "kb3", "title": "Worker concurrency model", "body": "Workers are stateless and safe to run in parallel against the same queue. The consumer group ID is read from QUEUE_GROUP env var; default is 'default'." },
+  { "id": "kb4", "title": "Cold-start budget", "body": "The CLI cold-start budget is 1.5 seconds. Anything beyond that is a perf issue. The dominant cost is the require graph; lazy-load any large SDK module." },
+  { "id": "kb5", "title": "Deprecation policy", "body": "We deprecate old API signatures one minor version before removal. The deprecation must include a console.warn pointing to the new signature." },
+  { "id": "kb6", "title": "Issue label taxonomy", "body": "Bug = unintended behavior in shipped code. Feature = new capability requested. Question = usage clarification. Docs = documentation gap. Perf = measurable speed/memory issue. When ambiguous, prefer the more specific label." },
+  { "id": "kb7", "title": "Retry policy defaults", "body": "Default retry policy is 3 attempts with 100ms initial backoff and 2x exponential factor. Override via the `retry` option in the client constructor." },
+  { "id": "kb8", "title": "Where to put API keys in CI", "body": "API keys for CI go in the repo's GitHub Actions secrets, never in committed files. Use the action `aws-actions/configure-aws-credentials` to surface them as env vars." },
+  { "id": "kb9", "title": "Image upload architecture", "body": "Image uploads >50MB must use the chunked endpoint. The merge step streams chunks to S3 — we never load full files in memory." },
+  { "id": "kb10", "title": "Why we don't accept Lambda PRs", "body": "Lambda support is community-maintained. We don't ship a SAM/serverless template; users have built their own and we link to them in DISCUSSIONS." }
+]
