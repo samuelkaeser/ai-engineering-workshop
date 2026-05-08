@@ -17,20 +17,25 @@ Two design choices to internalize while you do this:
 
 `shared/scorers.ts` already implements `llmJudgeReasoning` — a Sonnet 4.6 call that grades the SUT's `reasoning` field on a 0–5 rubric. Read that file before continuing.
 
-In `judge.eval.ts`:
+In `judge.eval.ts`, the `data` and `task` are reused from `shared/eval-harness.ts` (same SUT, same gold set as 03.1). Your one job: swap in `llmJudgeReasoning` as the scorer.
 
-1. Load the gold set as data (same shape as 03.1).
-2. Call `classifyIssue` as the task.
-3. Score with **only `llmJudgeReasoning`** (you'd add `exactLabel` too in real life — we keep them separate here so you can see the judge's score in isolation).
+We deliberately use **only `llmJudgeReasoning`** here (you'd add `exactLabel` too in real life — we keep them separate so you can see the judge's score in isolation).
 
 Then run `pnpm eval:dev` and inspect each row in the UI. **Click into a row** to see the judge's `justification` metadata — that's where rubric design becomes visible.
 
 ## Steps
 
-1. Read `shared/scorers.ts` lines 30–80.
-2. Fill in the TODOs in `judge.eval.ts`.
+1. Read `shared/scorers.ts` — focus on `JUDGE_RUBRIC` and `llmJudgeReasoning`.
+2. Fill in the one TODO in `judge.eval.ts`.
 3. Run `pnpm eval:dev`. Note the score (it'll be lower than `exactLabel` — the rubric is harder).
 4. **Edit the `JUDGE_RUBRIC` in `shared/scorers.ts`** — try tightening it (e.g. require the model to *quote* a phrase from the issue body). Re-run. Did the score change?
+
+## If your score looks wrong, check:
+
+- **Score is 0 across the board** — `scorers: []` is empty; did you swap in `llmJudgeReasoning`?
+- **Score is wildly higher than 0.75** — judge and SUT may be the same model. Confirm `JUDGE_MODEL` in `shared/client.ts` is Sonnet 4.6, not Haiku.
+- **Judge always returns 0 with `error: "no tool_use block"`** — the judge isn't calling the tool. Check `tool_choice` is still set in `llmJudgeReasoning`.
+- **Eval is very slow** — every example is now a second model call. ~30 calls × ~1s each is normal; budget ~30–45s.
 
 ## Discussion
 

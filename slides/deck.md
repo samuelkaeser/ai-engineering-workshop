@@ -43,7 +43,7 @@ Evals are **TDD for LLM apps.**
 
 ---
 
-# Block 2 — Forced tool-use (20m)
+# Block 2 — Forced tool-use (15m)
 
 > JSON mode says *"please be JSON"*.
 > Forced tool-use says *"the only legal next move is this schema"*.
@@ -60,7 +60,7 @@ You build `classifyIssue(title, body)` — the System Under Test for the rest of
 
 ---
 
-# Block 3 — Evals (75m)
+# Block 3 — Evals (80m)
 
 The centrepiece. Pair up.
 

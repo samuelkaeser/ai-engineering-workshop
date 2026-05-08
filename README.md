@@ -46,9 +46,9 @@ Opens the evalite UI at [http://localhost:3006](http://localhost:3006).
 |---|---|---|
 | 0 | Setup + audience calibration | 5m |
 | 1 | Framing: the loop you haven't written yet | 10m |
-| 2 | Structured output: forced tool-use + Zod | 20m |
+| 2 | Structured output: forced tool-use + Zod | 15m |
 | — | Stretch break | 5m |
-| 3 | **Evals — the centrepiece** | 75m |
+| 3 | **Evals — the centrepiece** | 80m |
 | — | Stretch break | 5m |
 | 4 | Agent loop (default) | 45m |
 | 5 | Wrap | 5m |

@@ -16,23 +16,26 @@ We're using **[Evalite](https://www.evalite.dev)** as the harness — Matt's own
 
 ## What you'll do
 
-In `accuracy.eval.ts`, complete the `evalite()` call so it:
-
-1. Loads the 30 examples from `datasets/gold-set.json` as the `data`.
-2. Calls `classifyIssue` from `shared/classify.ts` as the `task`.
-3. Scores with `exactLabel` and `schemaValid`.
+In `accuracy.eval.ts`, the `data` and `task` are pre-wired (see `shared/eval-harness.ts`). Your single job is to wire up the **scorers**: pass `exactLabel` and `schemaValid` (already imported) into the `scorers` array.
 
 Then run `pnpm eval:dev` and open [http://localhost:3006](http://localhost:3006).
 
 ## Steps
 
-1. Open `accuracy.eval.ts`. Find the TODOs.
-2. Run `pnpm eval:dev`. The UI will open. You should see ~24-26 of 30 passing on `exactLabel`. (If you see 0, check your TODOs.)
+1. Open `accuracy.eval.ts`. Fill in the one TODO.
+2. Run `pnpm eval:dev`. The UI will open. You should see ~24-26 of 30 passing on `exactLabel`. (If you see 0, check your TODO.)
 3. **Read the per-example results in the UI.** Which ones is the classifier getting wrong? Why might that be?
 4. We'll iterate on the prompt in 03.3 to move that number up.
 
 ## Hints
 
-- The Evalite shape is `evalite("name", { data, task, scorers })`.
-- `data` can be a function returning an array. Each entry's shape is up to you — we use the `GoldExample` directly so scorers can use the `label` field.
-- `task` receives one entry and should return whatever shape your scorers consume. Returning the full `IssueClassification` is what our scorers expect.
+- The Evalite shape is `evalite("name", { data, task, scorers })`. We've extracted `data` and `task` into `shared/eval-harness.ts` so 03.1 and 03.2 only differ in their scorers.
+- `exactLabel` returns 1 if `output.category === expected.label`, else 0.
+- `schemaValid` returns 1 if the output parses as `IssueClassificationSchema`. With forced tool-use this is always 1 — that's the point: it's the canary that fires only when something upstream has broken.
+
+## If your score looks wrong, check:
+
+- **Score is 0 across the board** — did you forget to put the scorers in the array?
+- **Score is much lower than 0.73** — are you on `claude-haiku-4-5`? (Check `shared/client.ts`.) Did you remove `tool_choice` from `classify.ts`?
+- **`schemaValid` is below 1.0** — the SUT response isn't matching `IssueClassificationSchema`; click into a failing row in the UI to see the parse error.
+- **Eval times out** — `ANTHROPIC_API_KEY` not set, or rate limited. Run `pnpm exercise 0.1` to confirm the API works.

@@ -25,9 +25,13 @@ Save the file, re-run `pnpm eval:dev` from 03.1 — your data is now part of the
 
 Open `shared/classify.ts` and find `DEFAULT_SYSTEM_PROMPT`. Change it. Re-run the eval. Watch the `exactLabel` score move.
 
-**Two tracks:**
-- **Easy:** tighten the system prompt. Add explicit category definitions. Add a tie-breaker rule ("if it could be both a bug and a feature, prefer bug"). Add output formatting rules. Re-run.
-- **Hard:** add a *few-shot example* to the prompt. Pick one of the trickier examples from the gold set and include it as a worked example in the system prompt. Re-run. Did it generalize? Did it overfit (other examples got worse)?
+**Two tracks** — pick the one that matches your pair's energy:
+
+> **🟢 Easy track — tighten the definitions.**
+> Append a one-sentence definition for each of the 5 categories to `DEFAULT_SYSTEM_PROMPT`. e.g. *"bug: existing behavior is wrong or crashes. feature: missing capability the user wants added. question: user is asking how to do something. docs: docs missing/wrong but code is fine. perf: code is correct but too slow / uses too much memory."* Add a tie-breaker rule for ambiguous cases ("if it could be both a bug and a feature, prefer bug"). Re-run.
+
+> **🔴 Hard track — few-shot, but pick *hard* examples.**
+> Add 1–2 worked examples to the system prompt — but pick the **hardest** gold examples (the ones the baseline currently *fails*), not the easiest. Why? Including an easy example teaches memorization; including a hard one tests whether the model can *generalize* the pattern you showed it. Look at your 03.1 results: the failing rows are your few-shot candidates. Re-run. Did it generalize? Did unrelated examples get *worse* (overfitting)?
 
 Keep a tally. **Highest `exactLabel` accuracy at the end wins.**
 
