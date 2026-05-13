@@ -4,7 +4,7 @@
 
 ## What we're building today
 
-For the next two hours, the System Under Test is one function:
+For the rest of the workshop, the System Under Test is one function:
 
 ```ts
 classifyIssue(title, body) → { category, confidence, reasoning }

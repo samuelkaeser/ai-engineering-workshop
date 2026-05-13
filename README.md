@@ -1,24 +1,23 @@
 # MattPocockVIS: AI Engineer Workshop (CS Edition)
 
-A 3-hour TypeScript workshop on Matt Pocock-style AI engineering, built around the eval-driven iteration loop. Anchored in [aihero.dev](https://www.aihero.dev) material: *Three Types of Evals*, *Your App Is Only As Good As Its Evals*, and Days 4-5 of the AI workshop.
+A 2-hour TypeScript workshop on Matt Pocock-style AI engineering, built around the eval-driven iteration loop. Anchored in [aihero.dev](https://www.aihero.dev) material: *Three Types of Evals*, *Your App Is Only As Good As Its Evals*, and Days 4-5 of the AI workshop.
+
+## When you sit down
+
+You walked in with nothing installed. Good — that's the assumption. Run these four commands first. ~10–15 minutes, mostly the `better-sqlite3` rebuild.
+
+1. `pnpm install`
+2. `pnpm rebuild better-sqlite3 && pnpm approve-builds`
+3. `cp .env.example .env` — paste your `ANTHROPIC_API_KEY` (grab one from console.anthropic.com if you don't have it yet)
+4. `pnpm exercise 0.1` — you should see a Claude response
+
+If step 4 errors, flag a facilitator. From there, the workshop is the parts that aren't typing — you'll point a coding agent at the TODOs and spend your attention on what evals catch.
 
 ## Prerequisites
 
 - Node.js 20+
 - pnpm (or npm/yarn/bun)
 - An [Anthropic API key](https://console.anthropic.com/settings/keys)
-
-## Required ≥24 hours before the workshop
-
-The on-site Block 0 is only 9 minutes. Do these the night before. The `better-sqlite3` rebuild is the single most likely thing to derail you.
-
-1. `pnpm install`
-2. `pnpm rebuild better-sqlite3 && pnpm approve-builds`
-3. `cp .env.example .env` and paste your `ANTHROPIC_API_KEY`
-4. Verify: `pnpm exercise 0.1` prints a Claude response
-5. Have a coding agent ready (Claude Code, Cursor, Copilot, whichever you already use). You won't hand-type exercise code on the day; you'll diagnose what AI-generated code gets wrong and decide what evals catch it.
-
-If step 4 fails, fix it before you arrive.
 
 ## Running exercises
 
@@ -46,18 +45,7 @@ Opens the evalite UI at [http://localhost:3006](http://localhost:3006).
 
 ## Schedule
 
-| Block | Topic | Time |
-|---|---|---|
-| 0 | Setup + audience calibration + form pairs | 9m |
-| 1 | Framing: evals are TDD for LLM apps | 6m |
-| 2 | Structured output: forced tool-use + Zod | 15m |
-| - | Stretch break | 5m |
-| 3 | **Evals: the centrepiece** | 80m |
-| - | Stretch break | 5m |
-| 4 | Agent loop (`04b-agent`) | 45m |
-| 5 | Wrap | 5m |
-
-See [`FACILITATOR.md`](./FACILITATOR.md) for facilitator notes.
+See [`FACILITATOR.md`](./FACILITATOR.md) for the run-of-show.
 
 ## Layout
 
