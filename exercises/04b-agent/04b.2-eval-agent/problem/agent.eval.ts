@@ -44,12 +44,12 @@ async function runAgent(question: string): Promise<string> {
 
 // TODO: write the rubric the judge will use to score the agent's answer.
 //
-// You're scoring two things together on 0–5:
+// You're scoring two things together on 0-5:
 //   (a) faithfulness to the corpus (the issues the agent looked at)
 //   (b) whether the answer actually addresses the question
 //
 // Re-read JUDGE_RUBRIC in shared/scorers.ts (the one from 03.2). The shape
-// is the same — describe what each score level means, and tell the judge to
+// is the same: describe what each score level means, and tell the judge to
 // reply by calling the score_answer tool. The plumbing below already wires
 // `RUBRIC` into the system prompt; you just have to design it.
 const RUBRIC = ``;
@@ -99,7 +99,7 @@ async function judgeAnswer({
   };
 }
 
-evalite("Agent — answer quality", {
+evalite("Agent: answer quality", {
   data: async () => [
     { input: { question: "How many issues do we have about timezones?" }, expected: { question: "How many issues do we have about timezones?" } },
     { input: { question: "Are there any feature requests around CSV imports?" }, expected: { question: "Are there any feature requests around CSV imports?" } },

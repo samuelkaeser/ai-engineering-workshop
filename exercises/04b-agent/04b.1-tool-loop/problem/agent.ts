@@ -1,0 +1,60 @@
+// REVIEW THIS:
+// An agent generated this `runAgent` for us. It looks like every agent loop
+// you've ever seen: call the model, dispatch tool calls, push results, loop.
+// Read the loop and ask: what does the model put in `response.content` when
+// it wants to do two things at once, and what does this code do with it?
+import { client, SUT_MODEL } from "@shared/client.ts";
+import { tools, handlers } from "./tools.ts";
+import type Anthropic from "@anthropic-ai/sdk";
+
+const SYSTEM_PROMPT = `You are a triage assistant for a GitHub issue tracker.
+Use the tools to look up issues, then answer the user's question concisely.`;
+
+const MAX_ITERATIONS = 6;
+
+export async function runAgent(question: string): Promise<string> {
+  const messages: Anthropic.MessageParam[] = [
+    { role: "user", content: question },
+  ];
+
+  for (let i = 0; i < MAX_ITERATIONS; i++) {
+    const response = await client.messages.create({
+      model: SUT_MODEL,
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      tools,
+      messages,
+    });
+
+    if (response.stop_reason === "end_turn") {
+      const first = response.content.find((b) => b.type === "text");
+      if (!first || first.type !== "text") throw new Error("no text in final response");
+      return first.text;
+    }
+
+    if (response.stop_reason === "tool_use") {
+      const block = response.content.find((b) => b.type === "tool_use");
+      if (!block || block.type !== "tool_use") throw new Error("unreachable");
+
+      const handler = handlers[block.name];
+      const content = handler
+        ? handler(block.input as Record<string, unknown>)
+        : `error: no handler for tool "${block.name}"`;
+      console.log(`  ↳ ${block.name}(${JSON.stringify(block.input)})`);
+
+      const toolResult: Anthropic.ToolResultBlockParam = {
+        type: "tool_result",
+        tool_use_id: block.id,
+        content,
+      };
+
+      messages.push({ role: "assistant", content: response.content });
+      messages.push({ role: "user", content: [toolResult] });
+      continue;
+    }
+
+    throw new Error(`Unexpected stop_reason: ${response.stop_reason}`);
+  }
+
+  throw new Error(`Agent didn't finish in ${MAX_ITERATIONS} iterations.`);
+}

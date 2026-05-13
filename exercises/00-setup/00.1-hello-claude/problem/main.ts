@@ -1,10 +1,22 @@
 import { client, SUT_MODEL } from "@shared/client.ts";
 
 async function main() {
-  // TODO: call client.messages.create with model = SUT_MODEL,
-  // max_tokens = 256, and a single user message asking Claude to
-  // introduce itself in one sentence. Then print the text out of the
-  // response (hint: response.content[0] has type "text" with a .text field).
+  const response = await client.messages.create({
+    model: SUT_MODEL,
+    max_tokens: 256,
+    messages: [
+      {
+        role: "user",
+        content: "Introduce yourself in one sentence.",
+      },
+    ],
+  });
+
+  const block = response.content[0];
+  if (block.type !== "text") {
+    throw new Error(`Expected text block, got ${block.type}`);
+  }
+  console.log(block.text);
 }
 
 main();

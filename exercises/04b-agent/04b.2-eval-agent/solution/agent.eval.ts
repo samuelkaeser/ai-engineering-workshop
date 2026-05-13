@@ -42,13 +42,22 @@ async function runAgent(question: string): Promise<string> {
   return "(agent did not finish)";
 }
 
-const RUBRIC = `Score 0–5:
-- 5: answer is correct, faithful to the issue tracker, and concise.
-- 3: roughly right but vague or partially missing.
-- 1: makes claims not supported by the corpus, or missed the question.
-- 0: hallucinates issues that don't exist.
+// This is the rubric we landed on in the dress rehearsal after one tightening.
+// First attempt asked the judge to verify faithfulness to the corpus. The judge
+// never sees the corpus, so it punished specificity rather than rewarding it
+// (more specific answers got lower scores). The fix is to grade only what the
+// judge can see: question/answer relationship, internal coherence, and whether
+// claims look grounded vs. suspiciously fabricated.
+const RUBRIC = `You are grading the answer an agent gave to a question about a GitHub issue tracker.
+You see only the question and the answer. You do NOT see the underlying issue tracker, so do not grade faithfulness to the corpus; grade what is visible.
 
-Reply by calling the score_answer tool.`;
+Score from 0 to 5 by these criteria:
+- 5 = directly answers the question. Cites specifics (issue IDs like b3 / f5 / p2, titles, counts, labels) and the specifics are internally consistent. Reads as a confident, grounded response.
+- 3 = addresses the question, but partial or vague (e.g. "there are some issues about timezones" with no IDs). No internal contradictions.
+- 1 = dodges the question into a generic summary, OR contains internal contradictions, OR contains suspiciously specific claims unrelated to anything an issue tracker would contain (random version numbers, exact percentages, named libraries) that read as invented.
+- 0 = answers a completely different question, refuses, or is empty.
+
+Reply by calling the score_answer tool. Do NOT add prose.`;
 
 async function judgeAnswer({
   output,
@@ -95,7 +104,7 @@ async function judgeAnswer({
   };
 }
 
-evalite("Agent — answer quality", {
+evalite("Agent: answer quality", {
   data: async () => [
     { input: { question: "How many issues do we have about timezones?" }, expected: { question: "How many issues do we have about timezones?" } },
     { input: { question: "Are there any feature requests around CSV imports?" }, expected: { question: "Are there any feature requests around CSV imports?" } },

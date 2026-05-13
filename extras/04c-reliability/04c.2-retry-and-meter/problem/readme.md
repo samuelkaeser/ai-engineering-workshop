@@ -1,10 +1,10 @@
-# 04c.2 — Retries and metering
+# 04c.2: Retries and metering
 
 ## What you'll do
 
 Two things you'll always need in production:
 1. **Retries with exponential backoff** for transient failures (429s, 529 overloads).
-2. **Metering** — write each call's token usage and latency to a JSONL file you can grep.
+2. **Metering**: write each call's token usage and latency to a JSONL file you can grep.
 
 ## Steps
 

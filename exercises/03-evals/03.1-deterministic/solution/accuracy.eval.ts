@@ -5,7 +5,7 @@ import {
   schemaValid,
 } from "@shared/scorers.ts";
 
-evalite("Issue classifier — accuracy", {
+evalite("Issue classifier: accuracy", {
   data: goldSetData,
   task: classifyTask,
   scorers: [exactLabel, schemaValid],

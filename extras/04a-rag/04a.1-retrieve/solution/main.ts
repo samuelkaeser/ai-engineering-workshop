@@ -60,5 +60,5 @@ const QUERY = "memory leak in worker";
 const hits = retrieve(QUERY);
 console.log(`Q: ${QUERY}`);
 for (const h of hits) {
-  console.log(`  [${h.score.toFixed(3)}] ${h.doc.id} — ${h.doc.title}`);
+  console.log(`  [${h.score.toFixed(3)}] ${h.doc.id}  ${h.doc.title}`);
 }

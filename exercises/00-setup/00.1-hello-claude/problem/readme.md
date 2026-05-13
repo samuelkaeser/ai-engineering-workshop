@@ -1,25 +1,24 @@
-# 00.1 — Hello Claude
+# 00.1: Hello Claude
 
-> **Find a partner now.** One laptop, swap typist after each exercise. Pairing makes a 3-hour workshop richer than soloing it — you'll argue about the gold-set labels in 03.3, and that's the whole point.
+> **Find a partner now.** One laptop, swap typist after each exercise. You'll argue about the gold-set labels in 03.3, and that's the whole point.
 
-A 2-minute smoke test to confirm your environment is wired up.
+A 60-second smoke test: confirm your environment is wired up.
 
 ## What you'll do
 
-Make a single call to Claude's Messages API and print the response.
+Run the file. Nothing to type.
 
 ## Steps
 
 1. Make sure `ANTHROPIC_API_KEY` is set in `.env` (copy `.env.example` if you haven't).
-2. Open `main.ts` and fill in the TODO.
-3. Run it:
+2. Run:
 
    ```sh
    pnpm exercise 0.1
    ```
 
-4. You should see Claude introduce itself in your terminal.
+3. You should see Claude introduce itself in your terminal. If you don't, fix your `.env` before Block 2 starts.
 
-## What's new (probably nothing)
+## Heads-up: this is an agent-era workshop
 
-This is just to make sure your key works and `tsx` runs. The interesting stuff starts in 02.
+You'll use a coding agent (Claude Code, Cursor, Copilot, whichever you brought) for the typing today. The interesting parts of the day are **diagnosing what an AI-generated implementation gets wrong**, deciding which evals would catch it, and curating the data those evals run on. Hand-typing 3-line API calls is not why you're here.

@@ -1,4 +1,4 @@
-# 04a.2 — Answer with retrieved context
+# 04a.2: Answer with retrieved context
 
 ## What you'll do
 

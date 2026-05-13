@@ -1,4 +1,4 @@
-# 04c.1 — Prompt caching
+# 04c.1: Prompt caching
 
 > Block 4c is a facilitator fallback. The default Block 4 is the agent loop (4b).
 
@@ -18,4 +18,4 @@ Anthropic's [prompt caching](https://docs.anthropic.com/en/docs/build-with-claud
 
 ## What to take away
 
-Caching is a single field — but only if your system prompt is *stable*. The moment you append a unique user-specific string to the system prompt, the cache evaporates. So: structure prompts with stable prefixes, variable suffixes.
+Caching is a single field, but only if your system prompt is *stable*. The moment you append a unique user-specific string to the system prompt, the cache evaporates. So: structure prompts with stable prefixes, variable suffixes.

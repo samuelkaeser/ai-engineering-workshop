@@ -1,17 +1,5 @@
 [
   {
-    "id": "b1",
-    "title": "App crashes on startup after upgrading to v2.3",
-    "body": "Repro: install v2.3, run `app start`. Crashes with the stack trace below. v2.2 worked fine.\n\nTypeError: Cannot read properties of undefined (reading 'config')\n  at Bootstrap.init (src/bootstrap.ts:42:18)",
-    "label": "bug"
-  },
-  {
-    "id": "b2",
-    "title": "NullPointerException when saving an empty form",
-    "body": "Hit Save with all fields empty -> 500. Expected: validation error toast.",
-    "label": "bug"
-  },
-  {
     "id": "b3",
     "title": "Date picker shows the wrong day in Australia/Sydney",
     "body": "Pick May 8 in the UI, server stores May 7. Probably a UTC offset bug. Other timezones look fine.",
@@ -37,21 +25,9 @@
   },
 
   {
-    "id": "f1",
-    "title": "Add a dark-mode toggle to the settings page",
-    "body": "We have a `prefers-color-scheme` listener already; would be great to expose an explicit toggle for users who want to override.",
-    "label": "feature"
-  },
-  {
     "id": "f2",
     "title": "Support webhooks for the new `invoice.refunded` event",
     "body": "We already deliver `invoice.paid`; adding `invoice.refunded` would let us close the loop on chargebacks without polling.",
-    "label": "feature"
-  },
-  {
-    "id": "f3",
-    "title": "CLI flag to skip database migrations on startup",
-    "body": "Useful in CI where we run migrations as a separate step. Today the only escape is setting `MIGRATE=false`, which isn't documented.",
     "label": "feature"
   },
   {
@@ -64,12 +40,6 @@
     "id": "f5",
     "title": "It would be really nice if the import wizard also supported CSVs",
     "body": "We can already import JSON and Parquet. Adding CSV would unblock a chunk of users coming from spreadsheet workflows. Right now they hit a wall and bounce.",
-    "label": "feature"
-  },
-  {
-    "id": "f6",
-    "title": "Migrate the public API from REST to GraphQL",
-    "body": "Long-term we'd like a single endpoint with field-level selection. Listing this as a feature request to track scope. Aware it's a big lift.",
     "label": "feature"
   },
 
@@ -86,18 +56,6 @@
     "label": "question"
   },
   {
-    "id": "q3",
-    "title": "Can I run two workers in parallel against the same queue?",
-    "body": "I'd like to scale horizontally. Is there a config to make the consumer group safe under concurrent consumers, or is that already the default?",
-    "label": "question"
-  },
-  {
-    "id": "q4",
-    "title": "Best practices for storing the API key in integration tests?",
-    "body": "We use `.env` in dev but for CI we don't want to commit anything. Curious what others do.",
-    "label": "question"
-  },
-  {
     "id": "q5",
     "title": "Why does the request hang when I pass an empty body?",
     "body": "If I `POST /jobs` with `{}`, the request hangs for 30s and then times out. Is that expected? I couldn't find anything about empty bodies in the README.",
@@ -110,24 +68,6 @@
     "label": "question"
   },
 
-  {
-    "id": "d1",
-    "title": "README doesn't mention the minimum Node version",
-    "body": "We require Node 20 (per `engines` in package.json) but the README install steps don't say so. Newcomers on Node 18 hit a cryptic syntax error.",
-    "label": "docs"
-  },
-  {
-    "id": "d2",
-    "title": "API reference is missing the cancel() method",
-    "body": "`Job.cancel()` is in the source as of v1.4 but doesn't show up in the generated TypeDoc. Probably a missing JSDoc tag.",
-    "label": "docs"
-  },
-  {
-    "id": "d3",
-    "title": "Typo in CONTRIBUTING.md",
-    "body": "Section \"Setting up your enviornment\" should be \"environment\".",
-    "label": "docs"
-  },
   {
     "id": "d4",
     "title": "Tutorial uses deprecated `createClient` signature",
@@ -148,18 +88,6 @@
   },
 
   {
-    "id": "p1",
-    "title": "Cold-start of the CLI takes ~4 seconds",
-    "body": "`time app --version` reports 3.9–4.2s on a recent MacBook. Most of that is the require graph (we ship the whole SDK). Could we lazy-load?",
-    "label": "perf"
-  },
-  {
-    "id": "p2",
-    "title": "Query response time exceeds 2s when result set > 10k rows",
-    "body": "p99 latency for /search jumps from ~120ms to >2s once the matched set crosses ~10k. Looks like we're materializing the full result before paginating.",
-    "label": "perf"
-  },
-  {
     "id": "p3",
     "title": "Image upload times out for files larger than 50MB",
     "body": "We chunk on the client but the server-side merge step seems to load the whole file in memory before persisting. 50MB+ uploads timeout at the LB after 60s.",
@@ -172,15 +100,118 @@
     "label": "perf"
   },
   {
-    "id": "p5",
-    "title": "Build is slow",
-    "body": "`pnpm build` takes 90+ seconds on my machine for what looks like a small change. Not sure if it's a real perf issue or our setup. Anyone else seeing this?",
-    "label": "perf"
-  },
-  {
     "id": "p6",
     "title": "Memory regression after upgrading lodash to 4.17.22",
     "body": "Heap usage in the API server grew ~20% across the upgrade. Reverting lodash brings it back. Filing under perf — happy to re-categorize if it's actually a bug in our usage.",
     "label": "perf"
+  },
+
+  {
+    "id": "h1",
+    "title": "Docs say to set `retries: -1` for infinite retries",
+    "body": "Followed the README example, got `expected non-negative number`. Either the docs are wrong or the validator is. Reading the source, only `Infinity` is accepted — the docs example never worked.",
+    "label": "docs"
+  },
+  {
+    "id": "h2",
+    "title": "Could the JSON streaming parser go faster on 1GB inputs?",
+    "body": "Current parser correctly handles 1GB files but takes ~4 minutes. Open to ideas — worker threads? a streaming approach? happy to PR if there's a direction you'd accept.",
+    "label": "perf"
+  },
+  {
+    "id": "h3",
+    "title": "How do I disable telemetry entirely?",
+    "body": "Checked config, env vars, and the docs — I can't find a way to opt out of the metrics endpoint. We can't deploy this without disabling it. Would you accept a PR adding `telemetry: false`?",
+    "label": "feature"
+  },
+  {
+    "id": "h4",
+    "title": "v3 migration guide is missing the breaking-changes section",
+    "body": "Other major-version guides have a Breaking section listing every change. v3's MIGRATING.md just links to the release notes, which aren't a complete list. New users keep tripping over removed APIs they didn't know about.",
+    "label": "docs"
+  },
+  {
+    "id": "h5",
+    "title": "App feels sluggish once a workspace has lots of files",
+    "body": "Not a hard repro. With ~500 files in the tree, opening any panel takes 2-3 seconds. No CPU spike I could see, no errors in the console. Just laggy. Smaller workspaces are fine.",
+    "label": "perf"
+  },
+  {
+    "id": "h6",
+    "title": "ENOENT error following the quickstart in README",
+    "body": "Ran `npx init` then `npm run build` exactly as the README shows. Got `ENOENT: no such file or directory, '.config.json'`. Looking at the source, init writes `config.json` (no dot prefix). The build itself is fine — the README is just stale.",
+    "label": "docs"
+  },
+  {
+    "id": "h7",
+    "title": "Search returns 504 on queries with >50k matches",
+    "body": "Up to ~20k matches the endpoint is fine. Above that, the gateway times out at 60s. Server logs show the query completes correctly — but at 95s. So search isn't broken, it's just slow on large result sets.",
+    "label": "perf"
+  },
+  {
+    "id": "h8",
+    "title": "How do I set per-API-key rate limits?",
+    "body": "Checked the docs and source — there's a global rate limit but no per-key knob. Is there a way to enable this, or does it need to be built? We have one customer doing 90% of our traffic.",
+    "label": "feature"
+  },
+  {
+    "id": "h9",
+    "title": "Why isn't `--quiet` mentioned anywhere in the docs?",
+    "body": "Discovered the flag by reading the source. It's been there since v0.3 and is super useful for CI logs. Could it be added to the man page?",
+    "label": "docs"
+  },
+  {
+    "id": "h10",
+    "title": "Could we add response caching to `/lookup`?",
+    "body": "Each call hits the DB even when the same key is queried repeatedly. ~80% of our requests are repeats within 60s. Latency on cache miss is fine — we're just doing more work than necessary. Code is correct, just wasteful.",
+    "label": "perf"
+  },
+  {
+    "id": "h11",
+    "title": "`Object.freeze(config)` breaks the library internally",
+    "body": "Calling `Object.freeze` on the object returned by `getConfig()` crashes the next internal call: 'Cannot assign to read only property `defaults`'. The crash site is in `internal/applyDefaults.ts:33` — the library mutates the public-API return value to apply defaults. That seems wrong; public-API returns should be safe to freeze.",
+    "label": "bug"
+  },
+  {
+    "id": "h12",
+    "title": "Export action freezes the UI for 30 seconds",
+    "body": "Click Export → page hangs, then download appears. We're serializing ~50MB on the main thread. The export produces the correct output — just at the cost of a 30s freeze. Needs to move off the main thread.",
+    "label": "perf"
+  },
+  {
+    "id": "h13",
+    "title": "Can I get a webhook when a job exceeds max retries?",
+    "body": "Jobs go to 'failed' silently after exhausting retries. I want a callback. Couldn't find this in the docs or source — does it exist, or would I need to build it?",
+    "label": "feature"
+  },
+  {
+    "id": "h14",
+    "title": "README sample code produces a TypeScript error",
+    "body": "Copy-pasting the README's quickstart: `const client = new Client({ apiKey })`. TypeScript errors: 'Property `baseUrl` is required'. The README wasn't updated for the breaking change in v2.0.",
+    "label": "docs"
+  },
+  {
+    "id": "h15",
+    "title": "Add a worked example for OAuth + custom scopes",
+    "body": "The auth docs cover basic OAuth and list scopes separately, but no end-to-end example combining the two. Most teams (including us) end up trial-and-erroring. A worked example in `/docs/auth/scopes.md` would save hours.",
+    "label": "docs"
+  },
+  {
+    "id": "h16",
+    "title": "What's the rotation policy for the signing keys?",
+    "body": "We're auditing for SOC2 and need to document this. Couldn't find anything about how often the JWT signing keys are rotated. Is there a public policy, or should I be reading the source?",
+    "label": "question"
+  },
+  {
+    "id": "h17",
+    "title": "Bulk delete times out for >500 records",
+    "body": "Selecting 500+ rows and hitting Delete → 60s spinner, then a generic error. Smaller batches work fine. Probably we're serializing all IDs into one big query. Functionally correct, just doesn't scale.",
+    "label": "perf"
+  },
+  {
+    "id": "h18",
+    "title": "Is there a way to globally disable email notifications?",
+    "body": "Per-user mute exists but no admin-level kill switch. We need to silence everything during scheduled maintenance windows. Couldn't find it anywhere.",
+    "label": "feature"
   }
 ]

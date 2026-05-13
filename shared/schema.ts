@@ -12,7 +12,7 @@ const fullJsonSchema = zodToJsonSchema(IssueClassificationSchema, {
   $refStrategy: "none",
 }) as Record<string, unknown>;
 
-// Anthropic's tool input_schema wants a top-level object schema —
+// Anthropic's tool input_schema wants a top-level object schema;
 // strip the JSON Schema metadata zod-to-json-schema adds.
 const { $schema: _s, definitions: _d, ...rest } = fullJsonSchema;
 

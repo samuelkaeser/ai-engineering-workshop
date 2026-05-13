@@ -4,3 +4,8 @@ node_modules
 dist
 feedback.jsonl
 metrics.jsonl
+
+# Facilitator-only artifacts. Not for workshop attendees.
+FACILITATOR.md
+CLAUDE.md
+slides/

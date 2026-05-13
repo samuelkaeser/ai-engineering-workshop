@@ -1,3 +1,10 @@
+// REVIEW THIS:
+// An agent generated this `classifyIssue` for us. It runs, but it throws on
+// every input we give it. Read the code, run it once, and pair up to answer:
+//   1. What's the bug? What mistake did the agent make about Anthropic's
+//      response shape?
+//   2. What kind of eval (deterministic? LLM-as-judge?) would catch this in
+//      CI before anyone shipped it? You'll meet that eval in Block 3.1.
 import { client, SUT_MODEL } from "@shared/client.ts";
 import {
   IssueClassificationSchema,
@@ -14,21 +21,35 @@ async function classifyIssue(
   title: string,
   body: string
 ): Promise<IssueClassification> {
-  // TODO 1: call client.messages.create with:
-  //   - model: SUT_MODEL
-  //   - max_tokens: 512
-  //   - system: SYSTEM_PROMPT
-  //   - tools: [{ name: TOOL_NAME, description: "...", input_schema: issueClassificationInputSchema }]
-  //   - tool_choice: { type: "tool", name: TOOL_NAME }   // <-- forces the tool call
-  //   - messages: [{ role: "user", content: `Title: ${title}\n\nBody:\n${body}` }]
+  const response = await client.messages.create({
+    model: SUT_MODEL,
+    max_tokens: 512,
+    system: SYSTEM_PROMPT,
+    tools: [
+      {
+        name: TOOL_NAME,
+        description: "Classify a GitHub issue and return a structured result.",
+        input_schema: issueClassificationInputSchema,
+      },
+    ],
+    tool_choice: { type: "tool", name: TOOL_NAME },
+    messages: [
+      {
+        role: "user",
+        content: `Title: ${title}\n\nBody:\n${body}`,
+      },
+    ],
+  });
 
-  // TODO 2: find the block in response.content where block.type === "tool_use".
-  //         If you can't find one, throw an error.
+  const block = response.content.find((b) => b.type === "tool_use");
+  if (!block || block.type !== "tool_use") {
+    throw new Error(
+      `Expected a tool_use block; got ${response.content.map((b) => b.type).join(", ")}`
+    );
+  }
 
-  // TODO 3: validate block.input with IssueClassificationSchema.parse(...)
-  //         and return it.
-
-  throw new Error("classifyIssue not implemented yet");
+  // Anthropic returns the tool input as a JSON string; parse it before validating.
+  return IssueClassificationSchema.parse(JSON.parse(block.input as string));
 }
 
 const SAMPLES = [
