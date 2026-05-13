@@ -43,10 +43,6 @@ pnpm eval:dev
 
 Opens the evalite UI at [http://localhost:3006](http://localhost:3006).
 
-## Schedule
-
-See [`FACILITATOR.md`](./FACILITATOR.md) for the run-of-show.
-
 ## Layout
 
 - `exercises/`: the workshop arc (Blocks 0, 2, 3, 4b, 5).
