@@ -6,7 +6,7 @@
 
 Two halves.
 
-### Part A (10m): the data flywheel
+### Part A (8m): the data flywheel
 
 Open `datasets/gold-set.json`. With your pair, **add exactly 1 new example** of a GitHub issue your imagination thinks would be hard for the classifier. Categories worth thinking about:
 
@@ -18,9 +18,9 @@ Open `datasets/gold-set.json`. With your pair, **add exactly 1 new example** of 
 
 Pick the label *you* think is correct. Disagree with your pair? Talk it out. That's the meta-lesson. One example forces you to argue about it instead of churning out three to pad the count.
 
-Save the file, re-run `pnpm eval:dev` from 03.1. Your data is now part of the eval.
+Save the file, re-run `pnpm eval:dev` from 03.1. Your row is now in *your* gold set — you'll score against it for the rest of the block.
 
-> This is Matt Pocock's [data flywheel](https://www.aihero.dev/workshops/day-5-evals-continued) made tactile. The eval is no longer someone else's eval. It's yours. Every example you add is a future regression you've insulated against.
+> No PR, no merge. Each pair edits their own clone. In a real team this is where you'd open a PR against the shared dataset and let CI re-run the eval — that's Matt Pocock's [data flywheel](https://www.aihero.dev/workshops/day-5-evals-continued) on a real codebase. Here, what matters is that you felt the loop: argue about a label → write it down → watch the score react. The eval is no longer someone else's eval.
 
 ### Part B (20m): iterate the prompt, leaderboard-style
 
